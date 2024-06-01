@@ -1,0 +1,5 @@
+CREATE USER user WITH PASSWORD 'mdp';
+CREATE DATABASE bdd;
+GRANT ALL PRIVILEGES ON DATABASE bdd TO user;
+
+psql -U user -d bdd

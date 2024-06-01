@@ -1,0 +1,18 @@
+
+---SELECT TABLE
+
+SELECT * FROM xxxxxxx;
+
+---DELETE TABLE
+
+DELETE FROM xxxxxxx;
+
+---DROP TABLE
+
+DROP TABLE xxxxxxx;
+
+--- TRUNCATE
+
+TRUNCATE  TABLE xxxxxxx RESTART  IDENTITY CASCADE;
+
+--- REQUEST
