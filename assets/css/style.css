@@ -20345,7 +20345,7 @@ dl li {
 /* === Landing screens === */
 /* Auth */
 .auth .login-half-bg {
-  background: url("../images/auth/login-bg4.jpg");
+  background: url("../images/auth/login-bg7.jpg");
   background-size: cover;
 }
 
@@ -20723,7 +20723,7 @@ dl li {
   -webkit-transition: background 0.25s ease;
   -moz-transition: background 0.25s ease;
   -ms-transition: background 0.25s ease;
-  background: url(../images/other/navbar-cover8.jpg) center center no-repeat;
+  background: url(../images/other/navbar-cover10.jpg) center center no-repeat;
   background-size: cover;
   height: 262px;
   width: auto;
