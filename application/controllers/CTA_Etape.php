@@ -31,12 +31,7 @@ class CTA_Etape extends CI_Controller {
             echo $_GET[$hd].'  ----   '. $_GET[$ha].'---'.$_GET[$ce].' !!!';
             $this->MD_Coureur_Etape->update($_GET[$ce],$_GET[$hd],$_GET[$ha]);
         } 
-        //$this->MD_Coureur_Etape->update($_GET['ce'],$_GET['hd'],$_GET['ha']);
+        $this->MD_Coureur_Etape->update($_GET['ce'],$_GET['hd'],$_GET['ha']);
         redirect('CTA_Etape/affecter_Horaire?etape=' .$_GET['etape']);
-    }
-    public function insert_j2(){
-        $this->MD_Coureur_Etape->insert1($_POST['id'],$_POST['coureur'],$_POST['dt'],$_POST['hd'],$_POST['ha']);
-        $id = $_POST['id'];
-        redirect('CTA_Etape/affecter_Horaire?etape=' .$id);
     }
 }

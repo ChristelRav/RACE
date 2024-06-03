@@ -15,23 +15,26 @@
                       <thead>
                         <tr>
                           <th>Etape</th>
-                          <th>Longueur</th>
-                          <th>Nombre coureur(s)</th>
-                          <th>Date étape</th>
-                          <th>Heure départ</th>
+                          <th>Nom</th>
+                          <th>Temps Chrono</th>
                           <th></th>
                         </tr>
                       </thead>
                       <tbody>
-                        <?php foreach ($etape as $e) { ?>
-                                <tr>
-                                <td><?= $e->nom; ?></td>
-                                <td><?= $e->longueur; ?></td>
-                                <td><?= $e->nbr_coureur; ?></td>
-                                <td><?= $e->date_etape; ?></td>
-                                <td><?= $e->heure_depart; ?></td>
-                                <td><button type="submit" class="btn btn-info mr-2"  href="javascript:void(0);" onclick="openPopup(<?php echo htmlspecialchars(json_encode( $e)); ?>)">Affecter</button></td>
-                                </tr>
+                      <?php foreach ($etape as $id_etape =>$classement) { ?>
+                            <tr>
+                              <th>Etape <?= $classement['rang_etape']; ?> - <?= $classement['nom']; ?>  ( <?= $classement['longueur']; ?>km)  -  <?= $classement['nbr_coureur']; ?>  coureur(s) </th>
+                            </tr>
+                            <?php foreach ($classement['etape'] as $e) {  ?>
+                              <tr>
+                                <td></td> 
+                                <td><?= $e['coureur']; ?></td>
+                                <td><?= $e['duree']; ?></td>                        
+                              </tr>
+                            <?php } ?>
+                            <tr>
+                                <td><button type="submit" class="btn btn-info mr-2"  href="javascript:void(0);" onclick="openPopup(<?php echo htmlspecialchars(json_encode( $classement)); ?>)">Affecter</button></td>
+                            </tr>
                         <?php } ?>
                       </tbody>
                     </table>
@@ -56,7 +59,7 @@ function openPopup(film) {
 
         // Utiliser les données du film pour remplir le formulaire
         document.getElementById('id').value = film.id_etape;
-        document.getElementById('hd').value = film.heure_depart;
+        document.getElementById('hd').value = film.hd;
         document.getElementById('de').value = film.date_etape;
     }
 

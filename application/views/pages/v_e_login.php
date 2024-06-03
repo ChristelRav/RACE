@@ -49,7 +49,7 @@
                         <i class="mdi mdi-account-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="text" name="equipe"  class="form-control form-control-lg border-left-0" id="exampleInputEmail" placeholder="Email" value="TeamA">
+                    <input type="text" name="equipe"  class="form-control form-control-lg border-left-0" id="exampleInputEmail" placeholder="Email" value="A">
                   </div>
                 </div>
                 <div class="form-group">

@@ -13,9 +13,9 @@ class MD_Coureur_Etape extends CI_Model {
         $insert_id = $this->db->insert_id();
         return $this->getOne($insert_id);
     }
-    public function insert1($col1,$col2,$col3,$col4,$col5) {
-        $sql = "insert into coureur_etape (id_etape,id_coureur,date_parcours,heure_depart,heure_arrive) values ( %s, %s, %s, %s, %s) ";
-        $sql = sprintf($sql,$this->db->escape($col1),$this->db->escape($col2),$this->db->escape($col3),$this->db->escape($col4),$this->db->escape($col5));
+    public function insert1($col1,$col2,$col4,$col5) {
+        $sql = "insert into coureur_etape (id_etape,id_coureur,heure_depart,heure_arrive) values ( %s,  %s, %s, %s) ";
+        $sql = sprintf($sql,$this->db->escape($col1),$this->db->escape($col2),$this->db->escape($col4),$this->db->escape($col5));
         $this->db->query($sql);
         $insert_id = $this->db->insert_id();
         return $this->getOne($insert_id);
@@ -32,10 +32,10 @@ class MD_Coureur_Etape extends CI_Model {
     public function display_list($where){
         $tab = $this->MD_Coureur_Etape->list_coureur_etape($where);
         foreach ($tab as $t) {
-            if ($t->genre == 1) {
+            if ($t->genre == 'M') {
                 $t->genre = 'Homme';
-            } elseif ($t->genre == 5) {
-                $t->genre = 'Femme';
+            } elseif ($t->genre == 'F') {
+                $t->genre == 'Femme';
             }
         }
         return $tab;

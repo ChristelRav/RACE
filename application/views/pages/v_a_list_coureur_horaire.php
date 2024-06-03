@@ -20,7 +20,6 @@
                             <th>équipe</th>
                             <th>nom</th>
                             <th>genre</th>
-                            <th>Date_étape</th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -33,12 +32,10 @@
                               <td><?= $c->nom; ?></td>
                               <td><?= $c->coureur; ?></td>
                               <td><?= $c->genre; ?></td>
-                              <td><?= $c->date_parcours; ?></td>
                               <input type="hidden" name="ce<?= $c->id_coureur_etape; ?>" value="<?= $c->id_coureur_etape; ?>">
                               <input type="hidden" name="etape" value="<?= $etape; ?>">
-                              <td><input type="time" name="hd<?= $c->id_coureur_etape; ?>" class="form-control" value="<?= $c->heure_depart ? date('H:i:s', strtotime($c->heure_depart)) : '00:00:00'; ?>" step="1"></td>
-                              <td><input type="time" name="ha<?= $c->id_coureur_etape; ?>" class="form-control" value="<?= $c->heure_arrive ? date('H:i:s', strtotime($c->heure_arrive)) : '00:00:00'; ?>" step="1"></td>
-                              <td><button type="button" class="btn btn-info" onclick="openPopupH(<?php echo htmlspecialchars(json_encode( $c)); ?>)"><i class="mdi mdi-plus"></i></button></td>
+                              <td><input type="datetime-local" name="hd<?= $c->id_coureur_etape; ?>" class="form-control" value="<?= $c->heure_depart ? date('Y-m-d\TH:i', strtotime($c->heure_depart)) : date('Y-m-d\T00:00'); ?>" step="1"></td>
+                              <td><input type="datetime-local" name="ha<?= $c->id_coureur_etape; ?>" class="form-control" value="<?= $c->heure_arrive ? date('Y-m-d\TH:i', strtotime($c->heure_arrive)) : date('Y-m-d\T00:00'); ?>" step="1"></td>
                             </tr>
                           <?php } ?>
                         </tbody>
@@ -51,32 +48,3 @@
             </div>
     </div>    
 </div>
-
-<?php $this->load->view('pages/v_a_popup_horaire'); ?>
-
-
-<script>
-
-    
-function openPopupH(film) {
-        var overlay = document.getElementById("shadow");
-        var popup = document.getElementById("popupH");
-
-        overlay.style.display = "flex";
-        popup.style.display = "block";
-
-        // Utiliser les données du film pour remplir le formulaire
-        document.getElementById('id').value = film.id_etape;
-        document.getElementById('coureur').value = film.id_coureur;
-    }
-
-    function closePopupH() {
-        var overlay = document.getElementById("shadow");
-        var popup = document.getElementById("popupH");
-
-        overlay.style.display = "none";
-        popup.style.display = "none";
-    }
-
-
-</script>

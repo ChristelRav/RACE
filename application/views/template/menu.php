@@ -30,6 +30,26 @@
             <span class="menu-title">Etapes</span>
           </a>
         </li>
+      <?php if (isset($_SESSION['admin'])) { ?>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo site_url('CTA_Coureur')?>">
+            <i class="mdi mdi-view-quilt menu-icon"></i>
+            <span class="menu-title">Participants</span>
+          </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+            <i class="mdi mdi-grid-large menu-icon"></i>
+              <span class="menu-title">Importation</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="<?php echo site_url('CTA_Import/index1')?>"> Etape & Résultat </a></li>
+                <li class="nav-item"> <a class="nav-link" href="<?php echo site_url('CTA_Import/index2')?>"> Points </a></li>            </ul>
+            </div>
+        </li>
+      <?php } ?>
       </ul>
     </nav>
     <!-- partial -->

@@ -30,6 +30,7 @@ DROP VIEW v_classement_equipe;
 DROP VIEW v_classement_coureur;
 DROP VIEW v_classement;
 
+DROP TABLE temp1;
 DROP TABLE coureur_rang CASCADE;
 DROP TABLE point_etape CASCADE;
 DROP TABLE coureur_etape CASCADE;
@@ -42,6 +43,7 @@ DROP TABLE admin CASCADE;
 
 --- TRUNCATE
 
+TRUNCATE  TABLE temp1 RESTART  IDENTITY CASCADE;
 TRUNCATE  TABLE point_etape RESTART  IDENTITY CASCADE;
 TRUNCATE  TABLE coureur_etape RESTART  IDENTITY CASCADE;
 TRUNCATE  TABLE coureur_categorie RESTART  IDENTITY CASCADE;
@@ -191,3 +193,112 @@ FROM v_classement_coureur vc
 LEFT JOIN point_etape pe ON vc.rang_coureur = pe.rang
 WHERE vc.id_etape = 2
 ORDER BY vc.id_etape, rang_coureur_calculated; -- Utilisation de l'alias distinct rang_coureur_calculated
+
+
+SELECT *, COALESCE(pe.point, 0) AS point 
+FROM v_classement_coureur vc
+LEFT JOIN point_etape pe ON vc.rang_coureur = pe.rang
+WHERE id_equipe =1
+ORDER BY vc.id_etape, vc.rang_coureur;
+
+
+
+SELECT  et.id_etape, et.nom AS etape, et.longueur , et.nbr_coureur , et.rang AS rang_etape, vc.id_coureur, vc.coureur, vc.num_dossard, vc.id_equipe, vc.nom AS equipe, vc.heure_depart, vc.heure_arrive, vc.duree, vc.rang_coureur,
+        COALESCE(pe.point, 0) AS point
+FROM  etape et
+LEFT JOIN  v_classement_coureur vc ON et.id_etape = vc.id_etape AND vc.id_equipe = 2
+LEFT JOIN  point_etape pe ON vc.rang_coureur = pe.rang
+WHERE 
+    vc.id_equipe = 2 OR vc.id_equipe IS NULL
+ORDER BY  et.rang, vc.rang_coureur;
+
+
+SELECT et.id_etape, et.nom AS etape,vc.coureur, vc.num_dossard, vc.nom AS equipe, vc.heure_depart, vc.heure_arrive, vc.duree, vc.rang_coureur, COALESCE(pe.point, 0) AS point 
+FROM etape et 
+LEFT JOIN v_classement_coureur vc ON et.id_etape = vc.id_etape AND vc.id_equipe = '1' 
+LEFT JOIN point_etape pe ON vc.rang_coureur = pe.rang 
+WHERE vc.id_equipe = '1' OR vc.id_equipe IS NULL ORDER BY et.rang, vc.rang_coureur;
+
+
+
+SELECT c.id_coureur, c.id_equipe, c.nom AS nom_coureur, c.num_dossard, c.genre, c.date_naissance,e.nom AS nom_equipe,cc.id_categorie, ca.nom AS nom_categorie
+FROM coureur c
+JOIN equipe e ON e.id_equipe = c.id_equipe
+LEFT JOIN coureur_categorie cc ON cc.id_coureur = c.id_coureur
+LEFT JOIN categorie ca ON ca.id_categorie = cc.id_categorie;
+
+
+SELECT c.id_coureur, c.id_equipe, c.nom AS nom_coureur, c.num_dossard, c.genre, c.date_naissance,e.nom AS nom_equipe,cc.id_categorie, ca.nom AS nom_categorie
+FROM coureur c
+JOIN equipe e ON e.id_equipe = c.id_equipe
+ JOIN coureur_categorie cc ON cc.id_coureur = c.id_coureur
+ JOIN categorie ca ON ca.id_categorie = cc.id_categorie;
+
+
+ 
+SELECT *, COALESCE(pe.point, 0) AS point 
+FROM v_classement_coureur vc
+LEFT JOIN point_etape pe ON vc.rang_coureur = pe.rang
+LEFT JOIN coureur_categorie cc ON cc.id_coureur = vc.id_coureur
+ORDER BY vc.id_etape, vc.rang_coureur;
+
+
+SELECT vc.id_coureur,vc.coureur,vc.duree,vc.id_etape,vc.id_equipe,cc.id_categorie, COALESCE(pe.point, 0) AS point 
+FROM v_classement_coureur vc
+LEFT JOIN point_etape pe ON vc.rang_coureur = pe.rang
+LEFT JOIN coureur_categorie cc ON cc.id_coureur = vc.id_coureur
+ORDER BY vc.id_etape, vc.rang_coureur;
+
+SELECT vc.id_equipe,vc.nom, SUM(COALESCE(pe.point, 0)) AS point 
+FROM equipe e
+LEFT JOIN v_classement_coureur vc ON vc.id_equipe = e.id_equipe  
+LEFT JOIN point_etape pe ON vc.rang_coureur = pe.rang
+LEFT JOIN coureur_categorie cc ON cc.id_coureur = vc.id_coureur
+WHERE cc.id_categorie = 1 OR cc.id_categorie IS NULL
+GROUP BY vc.id_equipe,vc.nom;
+
+
+SELECT vc.id_equipe,vc.nom, SUM(COALESCE(pe.point, 0)) AS point 
+FROM v_classement_coureur vc
+LEFT JOIN point_etape pe ON vc.rang_coureur = pe.rang
+LEFT JOIN coureur_categorie cc ON cc.id_coureur = vc.id_coureur
+WHERE CC.id_categorie = 2
+GROUP BY vc.id_equipe,vc.nom;
+
+
+
+SELECT vc.id_equipe,vc.nom, SUM(COALESCE(pe.point, 0)) AS point 
+FROM v_classement_coureur vc
+LEFT JOIN point_etape pe ON vc.rang_coureur = pe.rang
+LEFT JOIN coureur_categorie cc ON cc.id_coureur = vc.id_coureur
+WHERE CC.id_categorie = 3
+GROUP BY vc.id_equipe,vc.nom;
+
+
+SELECT  id_equipe,  nom,  point, RANK() OVER (ORDER BY point DESC) AS classement
+FROM ( SELECT  vc.id_equipe, vc.nom, SUM(COALESCE(pe.point, 0)) AS point 
+    FROM equipe e 
+    LEFT JOIN v_classement_coureur vc ON vc.id_equipe = e.id_equipe 
+    LEFT JOIN point_etape pe ON vc.rang_coureur = pe.rang 
+    LEFT JOIN coureur_categorie cc ON cc.id_coureur = vc.id_coureur 
+    WHERE cc.id_categorie = 1 OR cc.id_categorie IS NULL GROUP BY vc.id_equipe, vc.nom
+) AS subquery;
+
+
+
+INSERT INTO  coureur (id_equipe, nom, num_dossard, genre, date_naissance)
+SELECT  e.id_equipe,t1.nom,t1.numero_dossard,t1.genre,t1.date_naissance
+FROM temp1 t1
+JOIN equipe e ON e.nom = t1.equipe
+GROUP BY  e.id_equipe,t1.nom,t1.numero_dossard,t1.genre,t1.date_naissance;
+
+
+INSERT INTO coureur_etape (id_etape, id_coureur,  heure_depart, heure_arrive) 
+SELECT e.id_etape,c.id_coureur,e.date_etape + e.heure_depart::time as heure_depart , t1.arrivee
+FROM temp1 t1
+JOIN etape e ON e.rang = t1.etape_rang
+JOIN coureur c ON c.nom = t1.nom AND c.genre = t1.genre AND c.date_naissance = t1.date_naissance
+AND c.num_dossard = t1.numero_dossard;
+
+
+

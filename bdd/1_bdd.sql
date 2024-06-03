@@ -26,8 +26,8 @@ CREATE TABLE coureur (
     id_coureur SERIAL PRIMARY KEY,
     id_equipe INT REFERENCES equipe(id_equipe),
     nom VARCHAR(255) DEFAULT 'Koto Arihaja',
-    num_dossard INT,
-    genre INT DEFAULT 1, --(1):homme  ,(5):femme
+    num_dossard INT UNIQUE,
+    genre VARCHAR(50) DEFAULT 'F', --(1):homme  ,(5):femme
     date_naissance DATE
 );
 
@@ -52,13 +52,22 @@ CREATE TABLE coureur_etape (
     id_coureur_etape SERIAL PRIMARY KEY,
     id_etape INT REFERENCES etape(id_etape),
     id_coureur INT REFERENCES coureur(id_coureur),
-    date_parcours DATE DEFAULT CURRENT_DATE,
-    heure_depart TIME DEFAULT '00:00:00',
-    heure_arrive TIME DEFAULT '00:00:00'
+    heure_depart TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    heure_arrive TIMESTAMP DEFAULT (CURRENT_DATE + TIME '00:00:00')
 );
 
 CREATE TABLE point_etape (
     id_point_etape SERIAL PRIMARY KEY,
     rang INT,
     point DOUBLE PRECISION DEFAULT 0.0
+);
+
+CREATE TABLE temp1 (
+    etape_rang INT,
+    numero_dossard INT,
+    nom VARCHAR(255),
+    genre VARCHAR(50),
+    date_naissance DATE,
+    equipe VARCHAR(50),
+    arrivee TIMESTAMP
 );
