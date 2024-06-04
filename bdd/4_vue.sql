@@ -14,7 +14,7 @@ ORDER BY duree ASC
 
 SELECT *, DENSE_RANK() OVER (ORDER BY duree ASC) AS rang
 FROM v_classement
-WHERE id_etape = 2;
+WHERE id_etape = 3;
 
 CREATE VIEW v_classement_coureur AS (
 SELECT *,DENSE_RANK() OVER (PARTITION BY id_etape ORDER BY duree ASC) AS rang_coureur

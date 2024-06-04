@@ -19,9 +19,9 @@ class MD_Coureur_Categorie extends CI_Model {
             $result[$row->id_coureur]['nom_coureur'] = $row->nom_coureur;
             $result[$row->id_coureur]['num_dossard'] = $row->num_dossard;
             if ($row->genre == 'M') {
-                $row->genre == 'Homme';
+                $row->genre = 'Homme';
             } elseif ($row->genre == 'F') {
-                $row->genre == 'Femme';
+                $row->genre = 'Femme';
             }
             $result[$row->id_coureur]['genre'] = $row->genre;
             $result[$row->id_coureur]['date_naissance'] = $row->date_naissance;

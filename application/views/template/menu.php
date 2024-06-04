@@ -49,6 +49,12 @@
                 <li class="nav-item"> <a class="nav-link" href="<?php echo site_url('CTA_Import/index2')?>"> Points </a></li>            </ul>
             </div>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo site_url('CTA_Penalite')?>">
+            <i class="mdi mdi-minus-circle-outline  menu-icon"></i>
+            <span class="menu-title">Pénalisation</span>
+          </a>
+        </li>
       <?php } ?>
       </ul>
     </nav>

@@ -35,7 +35,7 @@ class MD_Coureur_Etape extends CI_Model {
             if ($t->genre == 'M') {
                 $t->genre = 'Homme';
             } elseif ($t->genre == 'F') {
-                $t->genre == 'Femme';
+                $t->genre = 'Femme';
             }
         }
         return $tab;

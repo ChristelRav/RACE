@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MD_Import extends CI_Model {
     public function import1($csv){
+        $this->load->model('MD_Temp');
         $this->load->model('MD_Etape');
         if (isset($_FILES[$csv]['name']) && $_FILES[$csv]['name'] != '') {
             $path = $_FILES[$csv]['tmp_name'];
@@ -28,8 +29,10 @@ class MD_Import extends CI_Model {
                 return $data;
             } else {
                 foreach ($csv_data as $line) {
-                    $this->MD_Etape->insert($line[0],str_replace(',', '.', $line[1]),$line[2],$line[3],$line[4],$line[5]);
+                    $this->MD_Temp->insert3($line[0],str_replace(',', '.', $line[1]),$line[2],$line[3],$line[4],$line[5]);
+                    //$this->MD_Etape->insert($line[0],str_replace(',', '.', $line[1]),$line[2],$line[3],$line[4],$line[5]);
                 }
+                $this->MD_Temp->insert_etape();
                 return;
             }
             fclose($file);
@@ -43,8 +46,8 @@ class MD_Import extends CI_Model {
         if (!$this->MD_Csv->is_positive($rang)) {$erreur_date[] = 'Rang Etape invalide';   echo $rang.'!!!<br>';}
         if (!$this->MD_Csv->is_positive($long)) {$erreur_date[] = 'kilometre invalide';   echo $long.'!!!<br>';}
         if (!$this->MD_Csv->is_positive($nb)) {$erreur_date[] = 'Nb coureur invalide';   echo $nb.'!!!<br>';}
-        if (!$this->MD_Csv->is_valid_date($date)) {$erreur_date[] = 'Date invalide';  echo $date.'???<br>';}
-        if (!$this->MD_Csv->is_valid_time($heure)) {$erreur_date[] = 'Heure depart invalide';  echo $heure.'???<br>';}
+        // if (!$this->MD_Csv->is_valid_date($date)) {$erreur_date[] = 'Date invalide';  echo $date.'???<br>';}
+        // if (!$this->MD_Csv->is_valid_time($heure)) {$erreur_date[] = 'Heure depart invalide';  echo $heure.'???<br>';}
         return $erreur_date;
     }
     //CSV 1 / 2
@@ -91,12 +94,13 @@ class MD_Import extends CI_Model {
         $erreur_date = [];
         if (!$this->MD_Csv->is_positive($rang)) {$erreur_date[] = 'Rang Etape invalide';   echo $rang.'!!!<br>';}
         if (!$this->MD_Csv->is_positive($num)) {$erreur_date[] = 'numero dossard invalide';   echo $num.'!!!<br>';}
-        if (!$this->MD_Csv->is_valid_date($date)) {$erreur_date[] = 'Date naissance invalide';  echo $date.'???<br>';}
-        if (!$this->MD_Csv->is_valid_datetime($heure)) {$erreur_date[] = 'Heure arrivee invalide';  echo $heure.'???<br>';}
+        // if (!$this->MD_Csv->is_valid_date($date)) {$erreur_date[] = 'Date naissance invalide';  echo $date.'???<br>';}
+        // if (!$this->MD_Csv->is_valid_datetime($heure)) {$erreur_date[] = 'Heure arrivee invalide';  echo $heure.'???<br>';}
         return $erreur_date;
     }
     //CSV 2
     public function import2($csv){
+        $this->load->model('MD_Temp');
         $this->load->model('MD_Point_Etape');
         if (isset($_FILES[$csv]['name']) && $_FILES[$csv]['name'] != '') {
             $path = $_FILES[$csv]['tmp_name'];
@@ -123,8 +127,10 @@ class MD_Import extends CI_Model {
             } else {
                 echo 'COUCOU';
                 foreach ($csv_data as $line) {
-                    $this->MD_Point_Etape->insert($line[0], $line[1]);
+                    $this->MD_Temp->insert1($line[0], $line[1]);
+                    //$this->MD_Point_Etape->insert($line[0], $line[1]);
                 }
+                $this->MD_Temp->insert_point();
                 return;
             }
             fclose($file);

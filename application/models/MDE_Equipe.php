@@ -7,5 +7,11 @@ class MDE_Equipe extends CI_Model{
         $client = $query->result_array();
         return $client;
     }
+    public function list(){
+        $this->db->select("*");
+        $this->db->from('equipe');
+        $query = $this->db->get();
+        return $query->result();  
+    }
 }
 ?>

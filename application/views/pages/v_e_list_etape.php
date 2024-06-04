@@ -1,9 +1,21 @@
 <?php if (!isset($etape)) $etape = array(); ?>   
 <?php if (!isset($coureur)) $coureur = array(); ?>   
 <link rel="stylesheet" href="<?php echo base_url("assets/css/popup.css"); ?>" >
-<div class="content-wrapper">       
+<div class="content-wrapper"> 
     <div class="row">
-    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="col-12 ">
+        <?php if(isset($error)){ ?>
+                      <div class="alert alert-danger alert-dismissible fade show"  role="alert">
+                        <strong>Error!</strong> <?php echo $error ?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+        <?php } ?> 
+      </div>   
+    </div>  
+    <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                 <h4 class="card-title">Tous les étapes </h4>

@@ -8,7 +8,7 @@
                             <form class="form-sample"  action="<?php echo site_url('CTE_Etape/affecter_Etape')?>"  method="POST">
                                 <p class="card-description">Liste coureur Equipe</p>
                                 <input type="hidden" name="id" class="form-control" id="id" >
-                                <input type="hidden" name="hd" class="form-control" id="hd" >
+                                <input type="hidden" name="hd" class="form-control" id="hd">
                                 <input type="hidden" name="de" class="form-control" id="de" >
                                 <div class="row">
                                     <div class="col-md-12">

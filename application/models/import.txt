@@ -1,0 +1,41 @@
+ if(isset($_FILES['csv_file1']['name']) && $_FILES['csv_file1']['name'] != '' ){
+            $resultat_import = $this->MD_Import->import1('csv_file1');
+            $hasErrors = false; 
+            if (isset($resultat_import['erreur1'])) {
+                foreach ($resultat_import['erreur1'] as $ligne => $erreurs) {
+                    if (!empty($erreurs)) {
+                        $hasErrors = true;
+                        break;
+                    }
+                }
+            }
+            if ($hasErrors ) {
+                $e = $this->MD_Import->tab_Erreur($resultat_import, 'erreur1');
+                $d = implode(',', $e);
+                redirect('CTA_Import/index1?erreur1=' . urlencode($d));
+            } else{
+                $data['succes1'] = 'Données Etape traitées correctement';
+                redirect('CTA_Import/index1?succes1=' . urlencode($data['succes1']));
+            }
+        }
+        if(isset($_FILES['csv_file2']['name']) && $_FILES['csv_file2']['name'] != ''){
+            $ri = $this->MD_Import->import1_2('csv_file2');
+            $he = false;
+            if (isset($ri['erreur2'])) {
+                foreach ($ri['erreur2'] as $ligne => $erreurs) {
+                    if (!empty($erreurs)) {
+                        $he = true;
+                        break;
+                    }
+                }
+            }   
+            if ($he) {
+                $e1 = $this->MD_Import->tab_Erreur($ri, 'erreur2'); 
+                $d1 = implode(',', $e1);
+                redirect('CTA_Import/index1?erreur2=' . urlencode($d1));
+            } 
+            else{
+                $data['succes2'] = 'Données Résultat traitées correctement';
+                redirect('CTA_Import/index1?succes2=' . urlencode($data['succes2']));
+            }
+        }

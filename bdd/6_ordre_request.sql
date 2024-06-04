@@ -43,3 +43,5 @@ GROUP BY cat.nom , vc.rang_etape,vc.nom, vc.id_coureur, vc.coureur, vc.id_equipe
 ORDER BY vc.rang_etape, cc.id_categorie
 );
 
+
+

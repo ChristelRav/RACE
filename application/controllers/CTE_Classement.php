@@ -24,7 +24,7 @@ class CTE_Classement extends CI_Controller {
         $data['etape'] = $this->MD_Etape->list();
         $data['categorie'] = $this->MD_Categorie->list();
         $data['classeC'] = $this->MD_Classement->display_categorie();
-        $data['classe'] = $this->MD_Classement->classement_equipe();
+        $data['classe'] = $this->MD_Classement->detail_classement_equipe();
         $this->viewer('v_e_classement_equipe',$data);
 	}
     public function selection_etape(){
@@ -38,5 +38,21 @@ class CTE_Classement extends CI_Controller {
         $data['categorie'] = $this->MD_Categorie->list();
         $data['classe'] = $this->MD_Classement->selection_categorie($_POST['categorie']);
         $this->viewer('v_e_classement_equipe',$data);
+    }
+    public function dash(){
+        $data = array();
+        $this->viewer('v_a_dashboard',$data);
+    }
+    public function pdf(){
+        //echo $_GET['nom'];
+        $this->load->library('Certification');
+        $pdf = new Certification();
+        $pdf->AddPage('L', array(297, 170));
+        $name =  $_GET['nom']; 
+        $course = "RUNNING TIME";
+        $date = date("d/m/Y"); 
+        $points = $_GET['points'];
+        $pdf->CertificateBody($name, $course, $date , $points);
+        $pdf->Output();
     }
 }

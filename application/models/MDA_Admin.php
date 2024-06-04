@@ -9,6 +9,10 @@ class MDA_Admin extends CI_Model{
     }
     public function truncate_all_tables() {
         $tables = [
+            'temp3',
+            'temp2',
+            'temp1',
+            'penalite',
             'point_etape',
             'coureur_etape',
             'coureur_categorie',

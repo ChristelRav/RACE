@@ -34,8 +34,8 @@
                               <td><?= $c->genre; ?></td>
                               <input type="hidden" name="ce<?= $c->id_coureur_etape; ?>" value="<?= $c->id_coureur_etape; ?>">
                               <input type="hidden" name="etape" value="<?= $etape; ?>">
-                              <td><input type="datetime-local" name="hd<?= $c->id_coureur_etape; ?>" class="form-control" value="<?= $c->heure_depart ? date('Y-m-d\TH:i', strtotime($c->heure_depart)) : date('Y-m-d\T00:00'); ?>" step="1"></td>
-                              <td><input type="datetime-local" name="ha<?= $c->id_coureur_etape; ?>" class="form-control" value="<?= $c->heure_arrive ? date('Y-m-d\TH:i', strtotime($c->heure_arrive)) : date('Y-m-d\T00:00'); ?>" step="1"></td>
+                              <td><input type="datetime-local" name="hd<?= $c->id_coureur_etape; ?>" class="form-control" value="<?= $c->heure_depart; ?>" step="1"></td>
+                              <td><input type="datetime-local" name="ha<?= $c->id_coureur_etape; ?>" class="form-control" value="<?= $c->heure_arrive; ?>" step="1"></td>
                             </tr>
                           <?php } ?>
                         </tbody>

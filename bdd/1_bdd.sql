@@ -71,3 +71,24 @@ CREATE TABLE temp1 (
     equipe VARCHAR(50),
     arrivee TIMESTAMP
 );
+
+CREATE TABLE temp2(
+    classement INT,
+    points DOUBLE PRECISION
+);
+
+CREATE TABLE temp3(
+    etape VARCHAR(255),
+    longueur DOUBLE PRECISION,
+    nb_coureur INT,
+    rang INT,
+    date_depart DATE,
+    heure_depart TIME
+);
+
+CREATE TABLE penalite (
+    id_penalite SERIAL PRIMARY KEY,
+    id_etape INT REFERENCES etape(id_etape),
+    id_equipe INT REFERENCES equipe(id_equipe),
+    temps_penalite TIME DEFAULT '00:00:00'
+);

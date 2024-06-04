@@ -11,6 +11,29 @@ class MD_Csv extends CI_Model{
         }
         return false;
     }
+    function validateDateString($dateString) {
+        // Define the expected formats
+        $formats = array(
+            "d/m/Y",
+            "m/d/Y"
+        );
+        
+        // Set the desired timezone
+        date_default_timezone_set('UTC'); // Change 'UTC' to your desired timezone
+        
+        foreach ($formats as $format) {
+            $dateTime = DateTime::createFromFormat($format, $dateString);
+            
+            // Check if the date was successfully parsed
+            if ($dateTime && $dateTime->format('d/m/Y') == $dateString) {
+                return true;
+            }
+        }
+        
+        // Return false if no valid format was found
+        return false;
+    }
+    
     public function is_valid_time($time_str, $format = 'H:i:s') {
         $d = DateTime::createFromFormat($format, $time_str);
         if ($d && $d->format($format) === $time_str) {

@@ -72,3 +72,48 @@ INSERT INTO temp1 (etape_rang, numero_dossard, genre, date_naissance, equipe, ar
 (8, 108, 'Homme', '2008-09-09', 'Equipe D', '2023-06-02 08:10:00'),
 (9, 109, 'Homme', '1995-12-25', 'Equipe E', '2023-06-02 08:20:00'),
 (10, 110, 'Femme', '1990-03-15', 'Equipe E', '2023-06-02 08:30:00');
+
+INSERT INTO temp3 (etape, longueur, nb_coureur, rang, date_départ, heure_départ) VALUES
+('Etape 1', 120.5, 50, 1, '2023-06-01', '08:00:00'),
+('Etape 2', 130.7, 48, 2, '2023-06-02', '08:15:00'),
+('Etape 3', 110.3, 47, 3, '2023-06-03', '08:30:00'),
+('Etape 4', 140.2, 49, 4, '2023-06-04', '08:45:00'),
+('Etape 5', 125.6, 45, 5, '2023-06-05', '09:00:00'),
+('Etape 6', 115.8, 50, 6, '2023-06-06', '09:15:00'),
+('Etape 7', 150.4, 46, 7, '2023-06-07', '09:30:00'),
+('Etape 8', 135.2, 48, 8, '2023-06-08', '09:45:00'),
+('Etape 9', 145.1, 49, 9, '2023-06-09', '10:00:00'),
+('Etape 10', 155.0, 50, 10, '2023-06-10', '10:15:00');
+
+
+
+INSERT INTO  coureur (id_equipe, nom, num_dossard, genre, date_naissance)
+SELECT  e.id_equipe,t1.nom,t1.numero_dossard,t1.genre,t1.date_naissance
+FROM temp1 t1
+JOIN equipe e ON e.nom = t1.equipe
+GROUP BY  e.id_equipe,t1.nom,t1.numero_dossard,t1.genre,t1.date_naissance;
+
+
+INSERT INTO coureur_etape (id_etape, id_coureur,  heure_depart, heure_arrive) 
+SELECT e.id_etape,c.id_coureur,e.date_etape + e.heure_depart::time as heure_depart , t1.arrivee
+FROM temp1 t1
+JOIN etape e ON e.rang = t1.etape_rang
+JOIN coureur c ON c.nom = t1.nom AND c.genre = t1.genre AND c.date_naissance = t1.date_naissance
+AND c.num_dossard = t1.numero_dossard;
+
+
+INSERT INTO point_etape (rang,point)
+SELECT classement , points FROM temp2;
+
+
+INSERT INTO etape (nom, longueur, nbr_coureur, rang,date_etape, heure_depart)
+SELECT   etape,longueur,nb_coureur,rang,date_depart,heure_depart FROM temp3;
+
+
+INSERT INTO penalite (id_etape, id_equipe, temps_penalite) VALUES
+(1, 1, '01:30:00'),
+(2, 2, '00:45:00'),
+(1, 3, '00:20:00'),
+(3, 1, '00:15:00'),
+(2, 1, '00:10:00');
+

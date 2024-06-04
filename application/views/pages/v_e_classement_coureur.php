@@ -15,8 +15,12 @@
                           <th></th>
                           <th>rang</th>
                           <th>Coureur</th>
+                          <th>Genre</th>
                           <th>Equipe</th>
-                          <th>point</th>
+                          <th>Durée</th>
+                          <th>Pénalité</th>
+                          <th>durée + pénalité</th>
+                          <th>point(s)</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -30,6 +34,10 @@
                                 <td><?= $e['rang_coureur']; ?></td>  
                                 <td><?= $e['coureur']; ?></td>
                                 <td><?= $e['nom']; ?></td>
+                                <td><?= $e['genre']; ?></td>
+                                <td><?= $e['duree_simple']; ?></td>
+                                <td><?= $e['temps_penalite']; ?></td>
+                                <td><?= $e['duree']; ?></td>
                                 <td><?= $e['point']; ?></td>                        
                               </tr>
                             <?php } ?>

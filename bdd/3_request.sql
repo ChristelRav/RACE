@@ -25,11 +25,25 @@ DELETE FROM equipe;
 DELETE FROM admin;
 
 ---DROP TABLE
-
+DROP VIEW v_classement_categorie;
+DROP VIEW v_classement_etape;
 DROP VIEW v_classement_equipe;
 DROP VIEW v_classement_coureur;
 DROP VIEW v_classement;
 
+DROP VIEW  v_classement_gnrl_etape;
+DROP VIEW  v_classement_gnrl_equipe_categorie     ;            
+DROP VIEW  v_classement_gnrl_equipe   ;       
+DROP VIEW  v_classement_gnrl_coureur_etape  ;                                    
+DROP VIEW  v_classement_gnrl_categorie;  
+DROP VIEW  v_classement_gnrl_etape;  
+DROP VIEW  v_classement_gnrl_coureur ; 
+DROP VIEW  v_classement_gnrl;          
+
+
+
+DROP TABLE temp2;
+DROP TABLE temp3;
 DROP TABLE temp1;
 DROP TABLE coureur_rang CASCADE;
 DROP TABLE point_etape CASCADE;
@@ -43,6 +57,9 @@ DROP TABLE admin CASCADE;
 
 --- TRUNCATE
 
+
+TRUNCATE  TABLE temp3 RESTART  IDENTITY CASCADE;
+TRUNCATE  TABLE temp2 RESTART  IDENTITY CASCADE;
 TRUNCATE  TABLE temp1 RESTART  IDENTITY CASCADE;
 TRUNCATE  TABLE point_etape RESTART  IDENTITY CASCADE;
 TRUNCATE  TABLE coureur_etape RESTART  IDENTITY CASCADE;
@@ -234,7 +251,6 @@ JOIN equipe e ON e.id_equipe = c.id_equipe
  JOIN coureur_categorie cc ON cc.id_coureur = c.id_coureur
  JOIN categorie ca ON ca.id_categorie = cc.id_categorie;
 
-
  
 SELECT *, COALESCE(pe.point, 0) AS point 
 FROM v_classement_coureur vc
@@ -285,20 +301,148 @@ FROM ( SELECT  vc.id_equipe, vc.nom, SUM(COALESCE(pe.point, 0)) AS point
 ) AS subquery;
 
 
-
-INSERT INTO  coureur (id_equipe, nom, num_dossard, genre, date_naissance)
-SELECT  e.id_equipe,t1.nom,t1.numero_dossard,t1.genre,t1.date_naissance
-FROM temp1 t1
-JOIN equipe e ON e.nom = t1.equipe
-GROUP BY  e.id_equipe,t1.nom,t1.numero_dossard,t1.genre,t1.date_naissance;
+SELECT count(*)
+FROM coureur_etape ce
+JOIN coureur c ON c.id_coureur = ce.id_coureur
+WHERE ce.id_etape = 1 AND c.id_equipe = 1 ;
 
 
-INSERT INTO coureur_etape (id_etape, id_coureur,  heure_depart, heure_arrive) 
-SELECT e.id_etape,c.id_coureur,e.date_etape + e.heure_depart::time as heure_depart , t1.arrivee
-FROM temp1 t1
-JOIN etape e ON e.rang = t1.etape_rang
-JOIN coureur c ON c.nom = t1.nom AND c.genre = t1.genre AND c.date_naissance = t1.date_naissance
-AND c.num_dossard = t1.numero_dossard;
+SELECT p.*,et.nom as etape, e.nom as equipe
+FROM penalite p 
+JOIN equipe e ON e.id_equipe = p.id_equipe
+JOIN etape et ON et.id_etape = p.id_etape;
+
+
+SELECT
+e.id_etape,
+e.nom AS etape,
+e.longueur,
+e.nbr_coureur,
+e.date_etape,
+COALESCE(vc.rang_etape, 0) AS rang_etape,
+COALESCE(vc.id_coureur, NULL) AS id_coureur,
+COALESCE(vc.id_equipe, NULL) AS id_equipe,
+COALESCE(vc.coureur, '') AS coureur,
+COALESCE(vc.hd, NULL) AS hd,
+COALESCE(vc.nom, '') AS nom,
+COALESCE(vc.num_dossard, 0) AS num_dossard,
+COALESCE(vc.heure_depart, NULL) AS heure_depart,
+COALESCE(vc.heure_arrive, NULL) AS heure_arrive,
+COALESCE(vc.duree_simple, NULL) AS duree_simple,
+COALESCE(vc.temps_penalite, NULL) AS temps_penalite,
+COALESCE(vc.duree, NULL) AS duree,
+COALESCE(vc.rang_coureur, 0) AS rang_coureur,
+COALESCE(vc.point_etape, 0) AS point_etape
+FROM
+    etape e
+LEFT JOIN
+    v_classement_gnrl_coureur_etape vc
+ON
+    e.id_etape = vc.id_etape
+    AND vc.id_equipe = 1
+ORDER BY
+    e.date_etape, e.heure_depart;
 
 
 
+
+SELECT
+        e.id_etape,
+        e.nom AS etape,
+        e.longueur,
+        e.nbr_coureur,
+        e.date_etape,
+        e.rang AS rang_etape,
+        e.heure_depart AS heureD,
+        COALESCE(vc.id_coureur, NULL) AS id_coureur,
+        COALESCE(vc.id_equipe, NULL) AS id_equipe,
+        COALESCE(vc.coureur, '') AS coureur,
+        COALESCE(vc.hd, NULL) AS hd,
+        COALESCE(vc.nom, '') AS nom,
+        COALESCE(vc.num_dossard, 0) AS num_dossard,
+        COALESCE(vc.heure_depart, NULL) AS heure_depart,
+        COALESCE(vc.heure_arrive, NULL) AS heure_arrive,
+        COALESCE(vc.duree_simple, NULL) AS duree_simple,
+        COALESCE(vc.temps_penalite, NULL) AS temps_penalite,
+        COALESCE(vc.duree, NULL) AS duree,
+        COALESCE(vc.rang_coureur, 0) AS rang_coureur,
+        COALESCE(vc.point_etape, 0) AS point_etape
+        FROM
+            etape e
+        LEFT JOIN
+            v_classement_gnrl_coureur_etape vc
+        ON
+            e.id_etape = vc.id_etape
+            AND vc.id_equipe = 1
+        ORDER BY
+            e.date_etape, e.heure_depart;
+        
+
+
+
+
+
+        SELECT
+        e.id_etape,
+        e.nom AS etape,
+        e.longueur,
+        e.nbr_coureur,
+        e.date_etape,
+        e.rang AS rang_etape,
+        e.heure_depart AS heureD,
+        COALESCE(vc.id_coureur, NULL) AS id_coureur,
+        COALESCE(vc.id_equipe, NULL) AS id_equipe,
+        COALESCE(vc.coureur, '') AS coureur,
+        COALESCE(vc.hd, NULL) AS hd,
+        COALESCE(vc.nom, '') AS nom,
+        COALESCE(vc.num_dossard, 0) AS num_dossard,
+        COALESCE(vc.heure_depart, NULL) AS heure_depart,
+        COALESCE(vc.heure_arrive, NULL) AS heure_arrive,
+        COALESCE(vc.duree_simple, NULL) AS duree_simple,
+        COALESCE(vc.temps_penalite, NULL) AS temps_penalite,
+        COALESCE(vc.duree, NULL) AS duree,
+        COALESCE(vc.rang_coureur, 0) AS rang_coureur,
+        COALESCE(vc.point_etape, 0) AS point_etape
+        FROM
+            etape e
+        LEFT JOIN
+            v_classement_gnrl_coureur_etape vc
+        ON
+            e.id_etape = vc.id_etape
+            AND vc.id_equipe = 1
+        ORDER BY
+            e.date_etape, e.heure_depart;
+        
+
+
+        SELECT
+        e.id_etape,
+        e.nom AS etape,
+        e.longueur,
+        e.nbr_coureur,
+        e.date_etape,
+        e.rang AS rang_etape,
+        e.heure_depart AS heureD,
+        COALESCE(vc.id_coureur, NULL) AS id_coureur,
+        COALESCE(vc.id_equipe, NULL) AS id_equipe,
+        COALESCE(vc.coureur, '') AS coureur,
+        COALESCE(vc.hd, NULL) AS hd,
+        COALESCE(vc.nom, '') AS nom,
+        COALESCE(vc.num_dossard, 0) AS num_dossard,
+        COALESCE(vc.heure_depart, NULL) AS heure_depart,
+        COALESCE(vc.heure_arrive, NULL) AS heure_arrive,
+        COALESCE(vc.duree_simple, NULL) AS duree_simple,
+        COALESCE(vc.temps_penalite, NULL) AS temps_penalite,
+        COALESCE(vc.duree, NULL) AS duree,
+        COALESCE(vc.rang_coureur, 0) AS rang_coureur,
+        COALESCE(vc.point_etape, 0) AS point_etape
+        FROM
+            etape e
+        LEFT JOIN
+            v_classement_gnrl_coureur_etape vc
+        ON
+            e.id_etape = vc.id_etape
+            AND vc.id_equipe = 1
+        ORDER BY
+            e.date_etape, e.heure_depart;
+        
